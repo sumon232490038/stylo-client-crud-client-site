@@ -1,12 +1,18 @@
-const Post = () => {
-  const handleAddInfo = (e) => {
+import { useLoaderData } from "react-router-dom";
+
+const Update = () => {
+  const loadedData = useLoaderData();
+  console.log(loadedData);
+
+  const handleUpdate = (e) => {
     e.preventDefault();
     const form = e.target;
     const name = form.name.value;
     const email = form.email.value;
     const newUser = { name, email };
-    fetch("http://localhost:5000/", {
-      method: "POST",
+
+    fetch(`http://localhost:5000/users/${loadedData._id}`, {
+      method: "PUT",
       headers: {
         "content-type": "application/json",
       },
@@ -14,21 +20,20 @@ const Post = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
-        if (data.insertedId) {
-          alert("User is added");
+        if (data.modifiedCount > 0) {
+          alert("Update Successfull");
+          console.log(data);
         }
-        form.reset();
       });
   };
   return (
-    <div className="hero bg-base-200 min-h-screen">
-      <div className="hero-content flex-col">
-        <div className="text-center lg:text-left">
-          <h1 className="text-5xl font-bold">Add your info now!</h1>
-        </div>
+    <div className="flex flex-col justify-center items-center text-center gap-5 mx-auto">
+      <h1 className="font-bold text-2xl">
+        Welcome Mr. {loadedData.name} Please Update your profile
+      </h1>
+      <div className="border-2 rounded-xl">
         <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
-          <form onSubmit={handleAddInfo} className="card-body">
+          <form onSubmit={handleUpdate} className="card-body">
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Name</span>
@@ -36,9 +41,8 @@ const Post = () => {
               <input
                 type="text"
                 name="name"
-                placeholder="Name"
+                defaultValue={loadedData.name}
                 className="input input-bordered"
-                required
               />
             </div>
             <div className="form-control">
@@ -48,13 +52,12 @@ const Post = () => {
               <input
                 type="email"
                 name="email"
-                placeholder="Email"
+                defaultValue={loadedData.email}
                 className="input input-bordered"
-                required
               />
             </div>
             <div className="form-control mt-6">
-              <button className="btn btn-primary">Add</button>
+              <button className="btn btn-primary">Update</button>
             </div>
           </form>
         </div>
@@ -63,4 +66,4 @@ const Post = () => {
   );
 };
 
-export default Post;
+export default Update;

@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 const Navber = () => {
   const link = (
     <>
-      <Link to="/">item-1</Link>
-      <Link to="/getanddelete">item-2</Link>
+      <Link to="/">Post</Link>
+      <Link to="/getanddelete">GetAndDelete</Link>
     </>
   );
   return (
